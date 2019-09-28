@@ -1,0 +1,9 @@
+.Colors {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.Colors > div {
+    width: 20%;
+}
