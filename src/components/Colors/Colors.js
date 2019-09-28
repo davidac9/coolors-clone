@@ -25,12 +25,18 @@ export default class Colors extends Component {
             ]
         })
     }
+    spacePressed = (event) => {
+        var code = event.keyCode
+        if (code === 32) {
+            this.randomColors()
+        }
+    }
     componentDidMount() {
         this.randomColors()
     }
     render() {
         return (
-            <div className="Colors">
+            <div className="Colors" onKeyDown={e => this.spacePressed(e)} tabIndex="0">
                 <div className="color-1"
                     style={{ backgroundColor: `${this.state.colors[0]}` }}
                 >color1</div>
