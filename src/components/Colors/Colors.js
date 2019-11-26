@@ -5,7 +5,7 @@ export default class Colors extends Component {
     state = {
         hexDigits: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'],
         colors: [],
-        amount: 1,
+        amount: 5,
     }
     randomColor = () => {
         return (`#${[this.state.hexDigits[Math.floor(Math.random() * 15)],
@@ -83,7 +83,7 @@ export default class Colors extends Component {
     }
     render() {
         const colorMap = this.state.colors.map((el, i) => (
-            <div key={i} className={`color${i + 1}`} style={{ backgroundColor: `${this.state.colors[i].color}` }}>
+            <div key={i} className={`color${i + 1} color`} style={{ backgroundColor: `${this.state.colors[i].color}` }}>
                 {this.state.colors[i].color.toUpperCase()}
                 <button onClick={() => this.colorLock(i)}>lock</button>
             </div>
@@ -91,7 +91,7 @@ export default class Colors extends Component {
         return (
             <div className="Colors" onKeyDown={e => this.spacePressed(e)} tabIndex="0">
                 {colorMap}
-                <div>
+                <div className="plus-minus">
                 {this.state.amount}
                 <button onClick={this.countPlus}>+</button>
                 <button onClick={this.countMinus}>-</button>

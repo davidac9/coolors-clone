@@ -7,3 +7,15 @@
 .Colors > div {
     width: 20%;
 }
+
+.color {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.plus-minus {
+    position: absolute;
+    
+}
