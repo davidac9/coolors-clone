@@ -1,21 +1,92 @@
 .Colors {
     display: flex;
-    width: 100vw;
+    max-width: 100vw;
     height: 100vh;
-}
-
-.Colors > div {
-    width: 20%;
+    max-height: 100%;
+    overflow-y: hidden;
 }
 
 .color {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    
 }
 
 .plus-minus {
-    position: absolute;
-    
+    position: fixed;
+    left: calc(50vw -  117px);
+    border: 1px solid black;
+    background: white;
+    border-radius: 11px;
+    padding: 15px;
+    width: 203px;
+    margin-top: 3px;
+}
+
+.lock-container {
+    border: 1px solid black;
+    background: white;
+    padding: 11px;
+    border-radius: 11px;
+}
+
+.lock-button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.lock-button {
+    border: none;
+    background: rgba(190, 0, 0, 0.89);
+    color: white;
+    font-size: 20px;
+    border-radius: 6px;
+    width: 100px;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-select: none;
+    align-self: center;
+
+}
+
+.lock-button:hover {
+    cursor: pointer;
+}
+
+.lock-true {
+    background: black;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.plus, .minus {
+    border: none;
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 25px;
+    width: 25px;
+    border-radius: 6px;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
+}
+.plus:hover, .minus:hover {
+    cursor: pointer;
+}
+.plus {
+    background: rgba(190, 0, 0, 0.89);
+    color: white;
+}
+.minus {
+    background: black;
+    color: white;
 }

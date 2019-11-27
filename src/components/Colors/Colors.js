@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './Colors.css'
+import axios from 'axios'
 
 export default class Colors extends Component {
     state = {
@@ -8,18 +9,25 @@ export default class Colors extends Component {
         amount: 5,
     }
     randomColor = () => {
-        return (`#${[this.state.hexDigits[Math.floor(Math.random() * 15)],
+        return (`${[this.state.hexDigits[Math.floor(Math.random() * 15)],
         this.state.hexDigits[Math.floor(Math.random() * 15)],
         this.state.hexDigits[Math.floor(Math.random() * 15)],
         this.state.hexDigits[Math.floor(Math.random() * 15)],
         this.state.hexDigits[Math.floor(Math.random() * 15)],
         this.state.hexDigits[Math.floor(Math.random() * 15)]].join('')}`)
     }
-    randomColors = () => {
+    randomColors = async () => {
         let newColors = []
         if (this.state.colors.length === 0) {
             for (let i = 0; i < this.state.amount; i++) {
-                newColors[i] = { color: this.randomColor(), lock: false }
+                console.log('help')
+                let currentColor = this.randomColor()
+                console.log(currentColor.toUpperCase())
+
+                await axios.get(`https://www.thecolorapi.com/id?hex=${currentColor.toUpperCase()}`)
+                    .then(res => {
+                        newColors[i] = { color: currentColor, lock: false, name: res.data.name.value }
+                    })
             }
         }
         else {
@@ -27,7 +35,11 @@ export default class Colors extends Component {
                 if (this.state.colors[i].lock === true) {
                     newColors[i] = this.state.colors[i]
                 } else {
-                    newColors[i] = { color: this.randomColor(), lock: false }
+                    let currentColor = this.randomColor()
+                    await axios.get(`https://www.thecolorapi.com/id?hex=${currentColor.toUpperCase()}`)
+                        .then(res => {
+                            newColors[i] = { color: currentColor, lock: false, name: res.data.name.value }
+                        })
                 }
             }
         }
@@ -45,15 +57,19 @@ export default class Colors extends Component {
         })
     }
     spacePressed = (event) => {
-        var code = event.keyCode
+        var code = event.which
         if (code === 32) {
             this.randomColors()
         }
     }
-    countPlus = () => {
+    countPlus = async () => {
         if (this.state.amount <= 20) {
             let newArr = this.state.colors
-            newArr.push({color: this.randomColor(), lock: false})
+            let newColor = this.randomColor()
+            await axios.get(`https://www.thecolorapi.com/id?hex=${newColor.toUpperCase()}`)
+                .then(res =>
+                    newArr.push({ color: newColor, lock: false, name: res.data.name.value })
+                )
             this.setState({
                 amount: this.state.amount + 1,
                 colors: newArr
@@ -64,9 +80,7 @@ export default class Colors extends Component {
         }
     }
     countMinus = () => {
-        console.log(`first boing`)
         if (this.state.amount > 1) {
-            console.log('boing')
             let newArr = this.state.colors
             newArr.pop()
             this.setState({
@@ -83,18 +97,32 @@ export default class Colors extends Component {
     }
     render() {
         const colorMap = this.state.colors.map((el, i) => (
-            <div key={i} className={`color${i + 1} color`} style={{ backgroundColor: `${this.state.colors[i].color}` }}>
-                {this.state.colors[i].color.toUpperCase()}
-                <button onClick={() => this.colorLock(i)}>lock</button>
+            <div key={i} className={`color${i + 1} color`} style={{ backgroundColor: `#${el.color}` }}>
+                <div className="lock-container">
+                    <p className="name">{el.name}</p>
+                    <p className="hex">
+                        {`#${el.color.toUpperCase()}`}
+                    </p>
+                    <div className="lock-button-container">
+                        <div type="reset" className={`lock-button lock-${el.lock}`} onClick={e => this.colorLock(i)}>{el.lock === true ? 'UNLOCK' : 'LOCK'}</div>
+                    </div>
+                </div>
             </div>
         ))
         return (
             <div className="Colors" onKeyDown={e => this.spacePressed(e)} tabIndex="0">
                 {colorMap}
                 <div className="plus-minus">
-                {this.state.amount}
-                <button onClick={this.countPlus}>+</button>
-                <button onClick={this.countMinus}>-</button>
+                    <p>
+                        Press space bar to randomize the colors. Press + or - to change the amount of colors.
+                    </p>
+                    <p className='amount'>
+                        Current amount of colors: {this.state.amount}
+                    </p>
+                    <div className="button-container">
+                        <div className='minus' onClick={this.countMinus}>-</div>
+                        <div className='plus' onClick={this.countPlus}>+</div>
+                    </div>
                 </div>
             </div>
         )
